@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrediPlus - Prediction Result</title>
+    <link rel="stylesheet" href="static/css1.css">
+</head>
+<body>
+    <header class="page-header">
+        <h1>Prediction Result</h1>
+        <a href="/" class="home-button">Home</a>
+    </header>
+
+    <main class="result-container">
+        <section class="result-box">
+            <div class="result-icon">
+                {% if 'will churn' in result.lower() or 'likely to churn' in result.lower() %}
+                    <div class="icon-warning">❌</div>
+                {% else %}
+                    <div class="icon-success">✅</div>
+                {% endif %}
+            </div>
+            <h2>Your Prediction</h2>
+            <p class="result-text">{{ result }}</p>
+            <div class="result-actions">
+                <a href="/churn" class="predict-again-btn">Predict Another</a>
+            </div>
+        </section>
+
+        <section class="factor-section">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h3>Top Churn Factors</h3>
+            </div>
+
+            <div class="factors-grid">
+                <div class="factors-list">
+                    <h4>Key Influencing Factors</h4>
+                    <ul class="factor-items">
+                        {% for feature, score in top_factors %}
+                        <li class="factor-item">
+                            <div class="factor-info">
+                                <span class="factor-name">{{ feature.replace('_', ' ').title() }}</span>
+                                <span class="factor-score {% if score > 0 %}positive{% else %}negative{% endif %}">
+                                    SHAP: {{ '%.4f'|format(score) }}
+                                </span>
+                            </div>
+                            <div class="factor-bar">
+                                <div class="factor-fill {% if score > 0 %}positive{% else %}negative{% endif %}" 
+                                     style="width: {{ (score|abs * 100)|round }}%"></div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="interpretation-box">
+                <h4>📋 How to Interpret This Result</h4>
+                <div class="interpretation-content">
+                    <div class="interpretation-item">
+                        <strong>Positive SHAP Values:</strong> These factors increase the likelihood of customer churn.
+                    </div>
+                    <div class="interpretation-item">
+                        <strong>Negative SHAP Values:</strong> These factors decrease the likelihood of customer churn.
+                    </div>
+                    <div class="interpretation-item">
+                        <strong>Higher Absolute Values:</strong> Indicate stronger influence on the prediction.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

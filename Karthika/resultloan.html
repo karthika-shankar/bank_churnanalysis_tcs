@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Prediction Result</title>
+    <link rel="stylesheet" href="static/css1.css">
+</head>
+<body>
+    <header class="page-header">
+        <h1>Loan Prediction Result</h1>
+        <a href="/" class="home-button">Home</a>
+    </header>
+
+    <main class="result-container">
+        <section class="result-box">
+            <div class="result-icon">
+                {% if '✅' in result %}
+                    <div class="icon-success">✅</div>
+                {% else %}
+                    <div class="icon-warning">❌</div>
+                {% endif %}
+            </div>
+
+            <h2>Your Prediction</h2>
+            <p class="result-text">{{ result }}</p>
+
+            <div class="result-actions">
+                <a href="/loan" class="predict-again-btn">Predict Another Loan</a>
+            </div>
+        </section>
+
+        {% if top_factors %}
+        <section class="factor-section">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h3>Top 5 Influencing Factors</h3>
+            </div>
+
+            <div class="factors-grid">
+                <div class="factors-list">
+                    <ul class="factor-items">
+                        {% for name, value in top_factors %}
+                        <li class="factor-item">
+                            <div class="factor-info">
+                                <span class="factor-name">{{ name.replace('_', ' ').title() }}</span>
+                                <span class="factor-score {% if value > 0 %}positive{% else %}negative{% endif %}">
+                                    SHAP: {{ '%.4f'|format(value) }}
+                                </span>
+                            </div>
+                            <div class="factor-bar">
+                                <div class="factor-fill {% if value > 0 %}positive{% else %}negative{% endif %}" 
+                                     style="width: {{ (value|abs * 100)|round }}%"></div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% if plot_path %}
+                <div class="chart-container">
+                    <h4>Feature Importance Visualization</h4>
+                    <div class="chart-wrapper">
+                        <img src="{{ url_for('static', filename=plot_path) }}" 
+                             alt="SHAP Feature Importance Bar Chart"
+                             class="chart-image">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="interpretation-box">
+                <h4>📋 How to Interpret This Result</h4>
+                <div class="interpretation-content">
+                    <div class="interpretation-item">
+                        <strong>Positive SHAP Values:</strong> Increase likelihood of loan approval.
+                    </div>
+                    <div class="interpretation-item">
+                        <strong>Negative SHAP Values:</strong> Decrease likelihood of loan approval.
+                    </div>
+                    <div class="interpretation-item">
+                        <strong>Higher Absolute Values:</strong> Have greater influence on the decision.
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>
