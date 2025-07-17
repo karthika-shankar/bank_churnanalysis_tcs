@@ -1,21 +1,17 @@
-/* Base styles */
+
 body {
-    background-image: url('images/background.jpg');
+    background-image: url('/static/images/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     margin: 0;
-   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     height: 100vh;
     color: #ffffff;
     display: flex;
     flex-direction: column;
 }
 
-/* Header */
-
-
-/* Hero section */
 .hero {
     flex: 1;
     display: flex;
@@ -57,5 +53,29 @@ body {
 
 .cta-button:hover {
     background-color: rgb(238, 227, 227);
+}
+.option-section {
+    margin: 40px auto;
+    width: 60%;
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+form label {
+    display: inline-block;
+    width: 200px;
+    margin-top: 10px;
+}
+
+form input, form select {
+    width: 200px;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+form button {
+    margin-top: 20px;
+    padding: 10px 20px;
 }
 
